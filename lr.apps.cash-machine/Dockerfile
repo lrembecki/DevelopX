@@ -17,6 +17,6 @@ RUN dotnet publish "lr.apps.cash-machine.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 EXPOSE 80
-COPY --from=build-env /app/out .
+COPY --from=publish /app/out .
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "lr.apps.cash-machine.dll"]
