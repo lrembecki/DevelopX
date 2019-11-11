@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using lr.libs.cash_machine;
+using lr.libs.cash_machine.Services;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +13,12 @@ namespace lr.apps.cash_machine
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc(options => { options.EnableEndpointRouting = false; });
+
+            services.AddTransient<INotesRepository, MoqNotesRepository>();
+            services.AddTransient<IWithdrawNotesService, WithdrawNotesService>();
+            services.AddTransient<ICashMachineService, CashMachineService>();
+            services.AddTransient<IAccountBalanceService, MoqAccountBalanceService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -24,6 +29,16 @@ namespace lr.apps.cash_machine
             }
 
             app.UseRouting();
+
+            app.UseStaticFiles();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=CashMachine}/{action=Index}/{id?}"
+                );
+            });
 
             app.UseEndpoints(endpoints =>
             {

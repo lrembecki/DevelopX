@@ -1,0 +1,33 @@
+﻿@model lr.libs.cash_machine.Models.WithdrawResponse
+@{
+    Layout = null;
+
+    var notes = new List<string>();
+
+    if (Model.Notes != null)
+    {
+        foreach (var note in Model.Notes)
+        {
+            for (int i = 0; i < note.Quantity; i++)
+            {
+                notes.Add(note.Note.ToString("c2"));
+            }
+        }
+    }
+
+    var requestString = Model.Request.Amount == null
+        ? "[Empty]"
+        : Model.Request.Amount.Value.ToString("c2");
+
+    var resultString = notes.Any() 
+        ? string.Join(", ", notes) 
+        : "Nothing to withdraw";
+}
+
+<div class="card shadow">
+    <div class="card-body">
+        <strong>Requested amount: </strong>@requestString
+        <br/>
+        <strong>Notes: </strong>@resultString
+    </div>
+</div>

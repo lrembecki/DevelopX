@@ -1,0 +1,30 @@
+﻿@using System.Net
+@model lr.libs.cash_machine.Models.WithdrawRequest
+@{
+    ViewData["Title"] = "Withdraw";
+}
+
+@if (ViewData["ExceptionMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @ViewData["ExceptionMessage"]
+    </div>
+}
+
+@using (Html.BeginForm(FormMethod.Post, false, new { id = "withdraw-form" }))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Amount)
+        @Html.TextBoxFor(model => model.Amount, new { @class = "form-control", type = "number", placeholder = "Insert amount you wish to withdraw" })
+        @Html.ValidationMessageFor(model => model.Amount)
+    </div>
+
+    <button id="form-submit" class="btn btn-outline-primary">Withdraw</button>
+}
+
+@if (ViewData["Response"] != null)
+{
+    <text><br/></text>
+
+    await Html.RenderPartialAsync("NoteView", ViewData["Response"]);
+}
