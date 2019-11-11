@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Cash Machine";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h3>Withdraw a cash</h3>
+                </div>
+                <div class="card-body" id="withdraw-form">
+                    @{
+                        await Html.RenderPartialAsync("Withdraw");
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-6 withdraw-history">
+
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $('#withdraw-form').on('submit', function(e) {
+            e.preventDefault();
+
+            $('#form-submit').attr('disabled', 'true');
+
+            $.ajax({
+                method: 'post',
+                url: 'cashmachine/withdraw',
+                data: $('#withdraw-form > form').serializeArray()
+            }).done(function (resultData) {
+                $.ajax({
+                    method: 'post',
+                    url: 'cashmachine/noteview',
+                    data: {
+                        request: resultData
+                    }
+                }).done(function (data) {
+                    $('.withdraw-history').prepend(data);
+                });
+
+            }).always(function() {
+                $('#form-submit').removeAttr('disabled');
+            });
+        });
+    </script>
+}

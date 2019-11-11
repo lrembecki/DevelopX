@@ -1,0 +1,28 @@
+﻿body {
+    padding-top: 75px;
+}
+
+.card {
+    border-radius: 0px;
+}
+
+.form-control {
+    border-radius: 0px;
+}
+
+.withdraw-history > .card {
+    margin-bottom: 10px;
+}
+
+input[type="number"] {
+    max-width: 300px;
+}
+
+.btn {
+    border-radius: 0px; 
+}
+
+span.field-validation-error {
+    color: red !important;
+    font-weight: bold;
+}

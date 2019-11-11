@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DevelopX Cash Machine - @ViewData["Title"]</title>
+    <link rel="stylesheet" type="text/css" href="~/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Site.css" />
+</head>
+<body>
+<div class="container-fluid">
+    @RenderBody()
+</div>
+<script src="~/jquery-3.4.1.js"></script>
+<script src="~/bootstrap/js/bootstrap.js"></script>
+<script src="~/notify.js"></script>
+<script>
+    $(document).ready(function() {
+        $.ajaxSetup({   
+            success: function (data) {
+                if (data.IsSucceeded === true && data.Message) {
+                    $.notify(data.Message, "success");
+                }
+            },
+            error: function (data) {
+                if (data.status === 400) {
+                    console.log(data);
+                    if (data.responseJSON) {
+                        BadRequestHandler(data.responseJSON);
+                    } else {
+                        alert(data.statusText);
+                    }
+                } else if (data.status === 404) {
+                    document.load('/error/pagenotfound');
+                } else if (data.status === 500) {
+                    document.load('/error/oops');
+                } else {
+                    console.log(data);
+                }
+                
+            }
+        });
+
+        function BadRequestHandler(data) {
+            if (data.message) {
+                $.notify(data.message, "error");
+            }
+        }
+    });
+    
+</script>
+    @RenderSection("Scripts", false)
+</body>
+</html>
